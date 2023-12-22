@@ -19,8 +19,6 @@ class BarChart {
   draw(data) {
     // Clear the chart
 
-   
-
     // Add the bars
     const barWidth = this.#svg.clientWidth / data[0].length;
 
@@ -87,51 +85,83 @@ class BubbleChart {
   }
 
   /**
-   * Displays the bar chart
+   * Displays the bubble chart
    * @param {Array<Array} dataBbl
    *
    */
-  draw(dataBbl, minSV, maxSV, minPOP, maxPOP, minPIB, maxPIB ) {
+  draw(dataBbl, minSV, maxSV, minPOP, maxPOP, minPIB, maxPIB, colors) {
     // Clear the chart
-    this.#canvas.replaceChildren();
-    const ctx = this.#canvas.getContext("2d"); 
-    ctx.clearRect(0, 0, 600, 400);
 
-    const difSV = maxSV-minSV;
-    const difPOP=maxPOP - minPOP;
-    const difPIB = maxPIB-minPIB;
+    this.#canvas.replaceChildren();
+    const ctx = this.#canvas.getContext("2d");
+    //ctx.clearRect(0, 0, 600, 400);
+
+    const width = this.#canvas.clientWidth - 100;
+    const height = this.#canvas.clientHeight - 50;
+    const difSV = maxSV - minSV;
+    const difPOP = maxPOP - minPOP;
+    const difPIB = maxPIB - minPIB;
     const bblMax = 30;
-    const bblMin =10;
-    
-    console.log(dataBbl);
+    const bblMin = 10;
+    const year = dataBbl[0][0].an;
+
+    ctx.font = "12px Comic Sans MS";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "left";
+    ctx.fillText("SV", 0, 50);
+
+    let fsize = 30;
+    ctx.font = fsize + "px Comic Sans MS";
+    ctx.fillStyle = "rgb(247, 25, 25, 0.5)";
+    ctx.textAlign = "center";
+    ctx.fillText(year, width - 30, height - 30);
+
+    ctx.beginPath();
+    ctx.moveTo(1, this.#canvas.clientHeight);
+    ctx.lineTo(1, this.#canvas.clientHeight - height);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(1, this.#canvas.clientHeight);
+    ctx.lineTo(width, this.#canvas.clientHeight);
+    ctx.stroke();
+
+    ctx.font = "12px Comic Sans MS";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "left";
+    ctx.fillText("PIB", width, this.#canvas.clientHeight - 15);
 
     for (let i = 0; i < dataBbl.length; i++) {
-    let valPOP=(dataBbl[i][1]).valoare;
-    let valPIB=(dataBbl[i][2]).valoare;
-    let valSV=(dataBbl[i][0]).valoare;
-    const label = (dataBbl[i][0]).tara;   
-     const bubbleDim = bblMin+(((valPOP - minPOP) / difPOP)*bblMax);
-     const barY =this.#canvas.clientHeight-(bblMin+(((valSV - minSV) / difSV)*(this.#canvas.clientHeight-bblMax)));
-     const barX = (bblMin+(((valPIB - minPIB) / difPIB)*(this.#canvas.clientWidth-bblMax)));
-  
-      ctx.fillStyle = "rgb(255, 99, 71, 0.5)";
+      let valPOP = dataBbl[i][1].valoare;
+      let valPIB = dataBbl[i][2].valoare;
+      let valSV = dataBbl[i][0].valoare;
+
+      const label = dataBbl[i][0].tara;
+
+      const bubbleDim = bblMin + ((valPOP - minPOP) / difPOP) * bblMax;
+      const barY =
+        this.#canvas.clientHeight -
+        (bblMax + ((valSV - minSV) / difSV) * (height - bblMax));
+      const barX = bblMax + ((valPIB - minPIB) / difPIB) * (width - bblMax);
+
+      ctx.fillStyle = colors[i]; // "rgb(255, 99, 71, 0.5)";
       ctx.beginPath();
       ctx.arc(barX, barY, bubbleDim, 0, 2 * Math.PI);
       ctx.fill();
 
-      let fsize = bubbleDim / 2*1.5;
+      let fsize = (bubbleDim / 2) * 1.5;
       ctx.font = fsize + "px Comic Sans MS";
       ctx.fillStyle = "black";
       ctx.textAlign = "center";
-      ctx.fillText(label, barX, barY); 
+      ctx.fillText(label, barX, barY);
     }
   }
   #createCanvas() {
     this.#canvas = document.createElement("canvas");
-    this.#canvas.width = 600;
-    this.#canvas.height = 400;
 
+    //this.#canvas.setAttribute("width", "100%");
+    // this.#canvas.setAttribute("height", "100%");
+    this.#canvas.width = 800;
+    this.#canvas.height = 600;
   }
 }
-
-
