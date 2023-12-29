@@ -3,19 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <title>Document</title>
-  
+    <script type="module" src="app.js" defer></script>
   </head>
   <header>
 
   </header>
   <body>
-    <script type="module" src="app.js"></script>
+    <!-- <script type="module" src="app.js"></script> -->
     <div>
       <script src="charts.js"></script>
       <h3>Afișare grafic evoluție pentru un indicator (PIB/SV/Pop) și o țară selectată de către utilizator</h3>
-      <label for "selectTari">Selectati Tara</label>
+      <label for="selectTari">Selectati Tara</label>
       <select id="selectTari"></select>
-      <label for "selectIndicator">Selectati Indicatorul</label>
+      <label for="selectIndicator">Selectati Indicatorul</label>
       <select id="selectIndicator"></select>
       <button id="btnAfiseaza">Afiseaza Grafic</button>   
     </div>
@@ -24,9 +24,9 @@
       <label for "selectAn">Selectati Anul</label>
       <select id="selectAni"></select>
       <button id="btnBubble">Bubble Chart</button>
-      <button id="btnPlay"> Vezi Animatie </button>
+      <button id="btnPlay"> Play Animation </button>
     </div>
-    <h3 id="title"></h3>
+    <h3 id="titlu"></h3>
     <div id="barChart" style="width: 900px; height:700px;">
     </div>
 

@@ -36,7 +36,7 @@ class BarChart {
       const bar = document.createElementNS(this.#svgns, "rect");
       bar.classList.add("bar");
       bar.setAttribute("x", barX);
-      bar.setAttribute("y", barY - 30);
+      bar.setAttribute("y", barY);
       bar.setAttribute("height", barHeight);
       bar.setAttribute("width", barWidth / 2);
 
@@ -50,9 +50,11 @@ class BarChart {
       title.innerHTML = "Year: " + label + ", Value: " + value;
       bar.appendChild(title);
 
-      //   text.setAttribute("x", barX);
-      //   text.setAttribute("y", this.#svg.clientHeight);
-      //   this.#svg.appendChild(text);
+      const text = document.createElementNS(this.#svgns, "text");
+      text.appendChild(document.createTextNode(label));
+      text.setAttribute("x", barX);
+      text.setAttribute("y", barY - 10);
+      this.#svg.appendChild(text);
 
       this.#svg.appendChild(bar);
     }
@@ -96,8 +98,8 @@ class BubbleChart {
     const ctx = this.#canvas.getContext("2d");
     //ctx.clearRect(0, 0, 600, 400);
 
-    const width = this.#canvas.clientWidth - 100;
-    const height = this.#canvas.clientHeight - 50;
+    const width = this.#canvas.clientWidth;
+    const height = this.#canvas.clientHeight;
     const difSV = maxSV - minSV;
     const difPOP = maxPOP - minPOP;
     const difPIB = maxPIB - minPIB;
@@ -109,13 +111,14 @@ class BubbleChart {
     ctx.fillStyle = "black";
     ctx.textAlign = "left";
     ctx.fillText("SV", 0, 50);
-
+    ctx.fillText("PIB", width - 30, this.#canvas.clientHeight - 20);
     let fsize = 30;
     ctx.font = fsize + "px Comic Sans MS";
     ctx.fillStyle = "rgb(247, 25, 25, 0.5)";
     ctx.textAlign = "center";
-    ctx.fillText(year, width - 30, height - 30);
+    ctx.fillText(year, width - 60, height - 40);
 
+    //trasam axele
     ctx.beginPath();
     ctx.moveTo(1, this.#canvas.clientHeight);
     ctx.lineTo(1, this.#canvas.clientHeight - height);
@@ -126,23 +129,25 @@ class BubbleChart {
     ctx.lineTo(width, this.#canvas.clientHeight);
     ctx.stroke();
 
-    ctx.font = "12px Comic Sans MS";
-    ctx.fillStyle = "black";
-    ctx.textAlign = "left";
-    ctx.fillText("PIB", width, this.#canvas.clientHeight - 15);
+    // ctx.font = "12px Comic Sans MS";
+    // ctx.fillStyle = "black";
+    // ctx.textAlign = "left";
+    //ctx.fillText("PIB", width, this.#canvas.clientHeight - 15);
 
     for (let i = 0; i < dataBbl.length; i++) {
-      let valPOP = dataBbl[i][1].valoare;
-      let valPIB = dataBbl[i][2].valoare;
-      let valSV = dataBbl[i][0].valoare;
+      let valPOP = dataBbl[i][1] ? dataBbl[i][1].valoare : 0;
+      let valPIB = dataBbl[i][2] ? dataBbl[i][2].valoare : 0;
+      let valSV = dataBbl[i][0] ? dataBbl[i][0].valoare : 0;
 
       const label = dataBbl[i][0].tara;
 
       const bubbleDim = bblMin + ((valPOP - minPOP) / difPOP) * bblMax;
-      const barY =
-        this.#canvas.clientHeight -
-        (bblMax + ((valSV - minSV) / difSV) * (height - bblMax));
-      const barX = bblMax + ((valPIB - minPIB) / difPIB) * (width - bblMax);
+      // const barY =
+      //   this.#canvas.clientHeight -
+      //   (bblMax + ((valSV - minSV) / difSV) * (height - bblMax));
+      // const barX = bblMax + ((valPIB - minPIB) / difPIB) * (width - bblMax);
+      const barX = this.mapValueToRange(valPIB, minPIB, maxPIB, 0, width);
+      const barY = this.mapValueToRange(valSV, minSV, maxSV, height, 0);
 
       ctx.fillStyle = colors[i]; // "rgb(255, 99, 71, 0.5)";
       ctx.beginPath();
@@ -155,6 +160,10 @@ class BubbleChart {
       ctx.textAlign = "center";
       ctx.fillText(label, barX, barY);
     }
+  }
+  mapValueToRange(value, inMin, inMax, outMin, outMax) {
+    // Map a value from one range to another
+    return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   }
   #createCanvas() {
     this.#canvas = document.createElement("canvas");
