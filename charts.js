@@ -100,6 +100,7 @@ class BubbleChart {
 
     const width = this.#canvas.clientWidth;
     const height = this.#canvas.clientHeight;
+
     const difSV = maxSV - minSV;
     const difPOP = maxPOP - minPOP;
     const difPIB = maxPIB - minPIB;
@@ -110,24 +111,87 @@ class BubbleChart {
     ctx.font = "12px Comic Sans MS";
     ctx.fillStyle = "black";
     ctx.textAlign = "left";
-    ctx.fillText("SV", 0, 50);
+    ctx.fillText("SV", 0, 30);
     ctx.fillText("PIB", width - 30, this.#canvas.clientHeight - 20);
     let fsize = 30;
     ctx.font = fsize + "px Comic Sans MS";
     ctx.fillStyle = "rgb(247, 25, 25, 0.5)";
     ctx.textAlign = "center";
-    ctx.fillText(year, width - 60, height - 40);
+    ctx.fillText(year, width - 60, height - 60);
 
     //trasam axele
+    const axisOffsetY = 50;
+    const axisOffsetX = 50;
+
+    // Axa Y
     ctx.beginPath();
-    ctx.moveTo(1, this.#canvas.clientHeight);
-    ctx.lineTo(1, this.#canvas.clientHeight - height);
+    ctx.moveTo(axisOffsetY, 0);
+    ctx.lineTo(axisOffsetY, this.#canvas.clientHeight - axisOffsetX);
     ctx.stroke();
 
+    // Axa X
     ctx.beginPath();
-    ctx.moveTo(1, this.#canvas.clientHeight);
-    ctx.lineTo(width, this.#canvas.clientHeight);
+    ctx.moveTo(axisOffsetY, this.#canvas.clientHeight - axisOffsetX);
+    ctx.lineTo(width, this.#canvas.clientHeight - axisOffsetX);
     ctx.stroke();
+    console.log(maxPIB + " " + maxPOP + " " + maxSV);
+
+    // verificam daca avem date pentru toate cele 3 dimensiuni:
+    if (!dataBbl.some((data) => data[0] && data[1] && data[2])) {
+      ctx.font = "20px Comic Sans MS";
+      ctx.fillStyle = "black";
+      ctx.textAlign = "center";
+      ctx.fillText(
+        "Nu exista date pentru toate dimensiunile!",
+        width / 2,
+        height / 2
+      );
+      return;
+    }
+
+    //Desenam diviziunile pentru Y (SV)
+    const numDivisionsY = 5;
+    const stepY = (height - axisOffsetX) / numDivisionsY;
+
+    for (let i = 0; i < numDivisionsY; i++) {
+      const yPosition = this.#canvas.clientHeight - axisOffsetX - i * stepY;
+
+      ctx.beginPath();
+      ctx.moveTo(axisOffsetY - 10, yPosition);
+      ctx.lineTo(axisOffsetY, yPosition);
+      ctx.stroke();
+
+      ctx.font = "10px Comic Sans MS";
+      ctx.fillStyle = "black";
+      ctx.textAlign = "right"; // Schimbat textAlign pentru a afișa valorile la dreapta axei Y
+      ctx.fillText(
+        ((i / (numDivisionsY - 1)) * difSV + minSV).toFixed(2),
+        axisOffsetY - 15,
+        yPosition
+      );
+    }
+
+    // Desenăm diviziunile pentru axa X (PIB)
+    const numDivisionsX = 5;
+    const stepX = (width - axisOffsetY) / numDivisionsX;
+
+    for (let i = 1; i <= numDivisionsX; i++) {
+      const xPosition = axisOffsetY + i * stepX;
+
+      ctx.beginPath();
+      ctx.moveTo(xPosition, this.#canvas.clientHeight - axisOffsetX);
+      ctx.lineTo(xPosition, this.#canvas.clientHeight - axisOffsetX + 10);
+      ctx.stroke();
+
+      ctx.font = "10px Comic Sans MS";
+      ctx.fillStyle = "black";
+      ctx.textAlign = "center";
+      ctx.fillText(
+        ((i / numDivisionsX) * difPIB + minPIB).toFixed(2),
+        xPosition,
+        this.#canvas.clientHeight - axisOffsetX + 20
+      );
+    }
 
     // ctx.font = "12px Comic Sans MS";
     // ctx.fillStyle = "black";
@@ -135,8 +199,8 @@ class BubbleChart {
     //ctx.fillText("PIB", width, this.#canvas.clientHeight - 15);
 
     for (let i = 0; i < dataBbl.length; i++) {
-      let valPOP = dataBbl[i][1] ? dataBbl[i][1].valoare : 0;
-      let valPIB = dataBbl[i][2] ? dataBbl[i][2].valoare : 0;
+      let valPOP = dataBbl[i][1] ? dataBbl[i][2].valoare : 0;
+      let valPIB = dataBbl[i][2] ? dataBbl[i][1].valoare : 0;
       let valSV = dataBbl[i][0] ? dataBbl[i][0].valoare : 0;
 
       const label = dataBbl[i][0].tara;
@@ -146,19 +210,52 @@ class BubbleChart {
       //   this.#canvas.clientHeight -
       //   (bblMax + ((valSV - minSV) / difSV) * (height - bblMax));
       // const barX = bblMax + ((valPIB - minPIB) / difPIB) * (width - bblMax);
-      const barX = this.mapValueToRange(valPIB, minPIB, maxPIB, 0, width);
-      const barY = this.mapValueToRange(valSV, minSV, maxSV, height, 0);
+
+      // Scalați valorile x și y pentru a se încadra în interiorul graficului cu o margine pentru raza maximă a bulei\\
+
+      const scaledX =
+        axisOffsetX +
+        this.mapValueToRange(
+          valPIB,
+          minPIB,
+          maxPIB,
+          0,
+          width - axisOffsetX - bubbleDim
+        );
+      let scaledY =
+        axisOffsetY +
+        this.mapValueToRange(
+          valSV,
+          minSV,
+          maxSV,
+          0,
+          height - axisOffsetY - bubbleDim
+        );
+
+      // Invertim coordonatele Y pentru a se potrivi cu sistemul de coordonate al graficului
+      scaledY = height - scaledY;
+
+      // Asigurați-vă că bulele nu depășesc marginea de jos a graficului
+      const maxY = height - axisOffsetX - bubbleDim;
+      const minY = axisOffsetX;
+      if (scaledY > maxY) {
+        scaledY = maxY;
+      } else if (scaledY < minY) {
+        scaledY = minY;
+      }
+
+      ///
 
       ctx.fillStyle = colors[i]; // "rgb(255, 99, 71, 0.5)";
       ctx.beginPath();
-      ctx.arc(barX, barY, bubbleDim, 0, 2 * Math.PI);
+      ctx.arc(scaledX, scaledY, bubbleDim, 0, 2 * Math.PI);
       ctx.fill();
 
       let fsize = (bubbleDim / 2) * 1.5;
       ctx.font = fsize + "px Comic Sans MS";
       ctx.fillStyle = "black";
       ctx.textAlign = "center";
-      ctx.fillText(label, barX, barY);
+      ctx.fillText(label, scaledX, scaledY);
     }
   }
   mapValueToRange(value, inMin, inMax, outMin, outMax) {

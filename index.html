@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html lang="ro">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Document</title>
-    <script type="module" src="app.js" defer></script>
-  </head>
-  <header>
+<head>
+  <meta charset="UTF-8" />
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="app.css">
+  <script type="module" src="app.js" defer></script>
+</head>
+<body>
+  <div class="left-column">
+    <!-- Continut pentru stanga -->
+    <script src="charts.js"></script>
+    <h3>Afișare grafic evoluție pentru un indicator (PIB/SV/Pop) și o țară selectată de către utilizator</h3>
+    <label for="selectTari">Selectati Tara</label>
+    <select id="selectTari"></select>
+    <label for="selectIndicator">Selectati Indicatorul</label>
+    <select id="selectIndicator"></select>
+    <button id="btnAfiseaza">Afiseaza Grafic</button>
 
-  </header>
-  <body>
-    <!-- <script type="module" src="app.js"></script> -->
-    <div>
-      <script src="charts.js"></script>
-      <h3>Afișare grafic evoluție pentru un indicator (PIB/SV/Pop) și o țară selectată de către utilizator</h3>
-      <label for="selectTari">Selectati Tara</label>
-      <select id="selectTari"></select>
-      <label for="selectIndicator">Selectati Indicatorul</label>
-      <select id="selectIndicator"></select>
-      <button id="btnAfiseaza">Afiseaza Grafic</button>   
-    </div>
-    <div> 
-      <h3>Afișare bubble chart pentru un an selectat de utilizator folosind un element de tip canvas</h3>
-      <label for "selectAn">Selectati Anul</label>
-      <select id="selectAni"></select>
-      <button id="btnBubble">Bubble Chart</button>
-      <button id="btnPlay"> Play Animation </button>
-    </div>
+    <h3>Afișare bubble chart pentru un an selectat de utilizator folosind un element de tip canvas</h3>
+    <label for "selectAn">Selectati Anul</label>
+    <select id="selectAni"></select>
+    <button id="btnBubble">Bubble Chart</button>
+    <button id="btnPlay"> Play Animation </button>
+
     <h3 id="titlu"></h3>
-    <div id="barChart" style="width: 900px; height:700px;">
-    </div>
+    <div id="barChart" style="width: 800px; height:600px;"></div>
+  </div>
 
-  </body>
+  <div class="right-column">
+    <!-- Continut pentru dreapta -->
+    <div id="tableContainer"></div>
+  </div>
+</body>
 </html>

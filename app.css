@@ -1,0 +1,71 @@
+body {
+  display: flex;
+  flex-direction: row; /* Direcția flexului rămâne orizontală */
+  height: 100vh;
+}
+
+.left-column {
+  padding: 10px;
+  flex-direction: column;
+}
+
+.right-container {
+  padding: 10px;
+  flex-direction: column;
+}
+
+.right-column {
+  padding: 10px;
+  max-width: fit-content;
+  text-align: left; /* Adaugă această linie pentru a alinia la stânga conținutul */
+}
+
+table {
+  font-family: Arial, sans-serif; /* Fontul pentru tabel */
+  font-size: 14px; /* Dimensiunea fontului */
+}
+
+th,
+td {
+  font-weight: bold; /* Textul bold pentru celulele de antet și celelalte celule */
+  color: white; /* Culoarea textului */
+}
+
+/* Padding pentru celule */
+td,
+th {
+  padding: 10px; /* Adăugați un padding de 10px celulelor */
+}
+
+/* Background pentru antetul tabelului */
+th {
+  background-color: #333; /* Culoarea de fundal pentru celulele de antet */
+}
+td:first-child {
+  background-color: #333; /* Culoarea de fundal pentru prima coloană */
+}
+
+/* Buton */
+button {
+  padding: 10px 15px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+/* Select */
+select {
+  padding: 8px;
+  font-size: 14px;
+}
+
+/* Option */
+option {
+  font-size: 14px;
+}
