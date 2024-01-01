@@ -17,15 +17,12 @@ class BarChart {
    * @param {Array<Array>} data
    */
   draw(data) {
-    // Clear the chart
-
-    // Add the bars
+    // Adaugam barele
     const barWidth = this.#svg.clientWidth / data[0].length;
 
     const f = this.#svg.clientHeight / Math.max(...data[1]);
 
     for (let i = 0; i < data[0].length; i++) {
-      //  const element = data[i]
       const label = data[0][i];
       const value = data[1][i];
 
@@ -40,8 +37,6 @@ class BarChart {
       bar.setAttribute("height", barHeight);
       bar.setAttribute("width", barWidth / 2);
 
-      //note: if the styles are set using CSS .bar:hover {...} will only work if marked as !important
-      //the styling should be moved to the .bar {...} instead
       bar.style.fill = "#db4437";
       bar.style.strokeWidth = 2;
       bar.style.stroke = "black";
@@ -66,10 +61,8 @@ class BarChart {
     this.#svg.style.borderWidth = "1px";
     this.#svg.style.borderStyle = "solid";
     this.#svg.style.backgroundColor = "WhiteSmoke";
-    //or
-    //this.#svg.setAttribute('style', 'border: 1px solid black');
 
-    this.#svg.setAttribute("width", "100%"); //note: this.#svg.width is readonly
+    this.#svg.setAttribute("width", "100%");
     this.#svg.setAttribute("height", "100%");
   }
 }
@@ -92,8 +85,6 @@ class BubbleChart {
    *
    */
   draw(dataBbl, minSV, maxSV, minPOP, maxPOP, minPIB, maxPIB, colors) {
-    // Clear the chart
-
     this.#canvas.replaceChildren();
     const ctx = this.#canvas.getContext("2d");
     //ctx.clearRect(0, 0, 600, 400);
@@ -134,7 +125,6 @@ class BubbleChart {
     ctx.moveTo(axisOffsetY, this.#canvas.clientHeight - axisOffsetX);
     ctx.lineTo(width, this.#canvas.clientHeight - axisOffsetX);
     ctx.stroke();
-    console.log(maxPIB + " " + maxPOP + " " + maxSV);
 
     // verificam daca avem date pentru toate cele 3 dimensiuni:
     if (!dataBbl.some((data) => data[0] && data[1] && data[2])) {
@@ -163,7 +153,7 @@ class BubbleChart {
 
       ctx.font = "10px Comic Sans MS";
       ctx.fillStyle = "black";
-      ctx.textAlign = "right"; // Schimbat textAlign pentru a afișa valorile la dreapta axei Y
+      ctx.textAlign = "right";
       ctx.fillText(
         ((i / (numDivisionsY - 1)) * difSV + minSV).toFixed(2),
         axisOffsetY - 15,
@@ -171,7 +161,7 @@ class BubbleChart {
       );
     }
 
-    // Desenăm diviziunile pentru axa X (PIB)
+    // Desenam diviziunile pentru axa X (PIB)
     const numDivisionsX = 5;
     const stepX = (width - axisOffsetY) / numDivisionsX;
 
@@ -193,11 +183,6 @@ class BubbleChart {
       );
     }
 
-    // ctx.font = "12px Comic Sans MS";
-    // ctx.fillStyle = "black";
-    // ctx.textAlign = "left";
-    //ctx.fillText("PIB", width, this.#canvas.clientHeight - 15);
-
     for (let i = 0; i < dataBbl.length; i++) {
       let valPOP = dataBbl[i][1] ? dataBbl[i][2].valoare : 0;
       let valPIB = dataBbl[i][2] ? dataBbl[i][1].valoare : 0;
@@ -206,12 +191,8 @@ class BubbleChart {
       const label = dataBbl[i][0].tara;
 
       const bubbleDim = bblMin + ((valPOP - minPOP) / difPOP) * bblMax;
-      // const barY =
-      //   this.#canvas.clientHeight -
-      //   (bblMax + ((valSV - minSV) / difSV) * (height - bblMax));
-      // const barX = bblMax + ((valPIB - minPIB) / difPIB) * (width - bblMax);
 
-      // Scalați valorile x și y pentru a se încadra în interiorul graficului cu o margine pentru raza maximă a bulei\\
+      // Scalam valorile x și y pentru a se încadra în interiorul graficului cu o margine pentru raza maximă a bulei\\
 
       const scaledX =
         axisOffsetX +
@@ -232,10 +213,9 @@ class BubbleChart {
           height - axisOffsetY - bubbleDim
         );
 
-      // Invertim coordonatele Y pentru a se potrivi cu sistemul de coordonate al graficului
+      // Inversam coordonatele Y pentru a se potrivi cu sistemul de coordonate al graficului
       scaledY = height - scaledY;
 
-      // Asigurați-vă că bulele nu depășesc marginea de jos a graficului
       const maxY = height - axisOffsetX - bubbleDim;
       const minY = axisOffsetX;
       if (scaledY > maxY) {
@@ -243,8 +223,6 @@ class BubbleChart {
       } else if (scaledY < minY) {
         scaledY = minY;
       }
-
-      ///
 
       ctx.fillStyle = colors[i]; // "rgb(255, 99, 71, 0.5)";
       ctx.beginPath();
@@ -264,9 +242,6 @@ class BubbleChart {
   }
   #createCanvas() {
     this.#canvas = document.createElement("canvas");
-
-    //this.#canvas.setAttribute("width", "100%");
-    // this.#canvas.setAttribute("height", "100%");
     this.#canvas.width = 800;
     this.#canvas.height = 600;
   }

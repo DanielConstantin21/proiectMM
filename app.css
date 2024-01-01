@@ -1,6 +1,6 @@
 body {
   display: flex;
-  flex-direction: row; /* Direcția flexului rămâne orizontală */
+  flex-direction: row;
   height: 100vh;
 }
 
@@ -17,32 +17,32 @@ body {
 .right-column {
   padding: 10px;
   max-width: fit-content;
-  text-align: left; /* Adaugă această linie pentru a alinia la stânga conținutul */
+  text-align: left;
 }
 
 table {
-  font-family: Arial, sans-serif; /* Fontul pentru tabel */
-  font-size: 14px; /* Dimensiunea fontului */
+  font-family: Arial, sans-serif;
+  font-size: 14px;
 }
 
 th,
 td {
-  font-weight: bold; /* Textul bold pentru celulele de antet și celelalte celule */
-  color: white; /* Culoarea textului */
+  font-weight: bold;
+  color: white;
 }
 
 /* Padding pentru celule */
 td,
 th {
-  padding: 10px; /* Adăugați un padding de 10px celulelor */
+  padding: 10px;
 }
 
 /* Background pentru antetul tabelului */
 th {
-  background-color: #333; /* Culoarea de fundal pentru celulele de antet */
+  background-color: #333;
 }
 td:first-child {
-  background-color: #333; /* Culoarea de fundal pentru prima coloană */
+  background-color: #333;
 }
 
 /* Buton */

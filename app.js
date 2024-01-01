@@ -151,10 +151,9 @@ function initializareDate() {
           getBubble(anii[currentIndex]);
           currentIndex++;
 
-          // Adjust the delay between frames (currently 1000 milliseconds)
           setTimeout(function () {
             currentAnimationFrame = requestAnimationFrame(animateStep);
-          }, 700); // Adjust the delay as needed
+          }, 700);
         } else {
           isAnimating = false;
           btnPlay.innerHTML = "Play Animation";
@@ -163,7 +162,7 @@ function initializareDate() {
 
       animateStep();
     }
-    console.log(datele);
+
     let btnPlay = document.getElementById("btnPlay");
 
     btnPlay.addEventListener("click", function () {
@@ -179,8 +178,6 @@ function initializareDate() {
         btnPlay.innerHTML = "Play Animation";
       }
     });
-
-    ///
 
     const minSV = datele
       .filter((d) => d.indicator == "SV" && d.valoare !== null)
@@ -228,13 +225,6 @@ function initializareDate() {
         const arr = [u[0], u[1], u[2]];
         array.push(arr);
       }
-
-      // // Verificați dacă există date pentru cel puțin una dintre dimensiuni
-      // if (!array.some((data) => data[0] && data[1] && data[2])) {
-      //   // Dacă nu există date, afișați un mesaj și ieșiți din metodă
-      //   console.log("Nu există date pentru toate dimensiunile");
-      //   return;
-      // }
 
       bubbleChart.draw(
         array,
@@ -305,7 +295,7 @@ function initializareDate() {
       const countries = Array.from(new Set(data.map((item) => item.tara)));
       const indicators = ["SV", "PIB", "POP"];
 
-      // Calculăm valorile medii pentru fiecare indicator
+      // Calculam valorile medii pentru fiecare indicator
       const averageValues = {};
       for (const indicator of indicators) {
         const values = data
@@ -319,7 +309,7 @@ function initializareDate() {
       const table = document.createElement("table");
       const headerRow = document.createElement("tr");
 
-      // Adăugăm antetele pentru coloane
+      // Adaugam antetele pentru coloane
       const headerCell = document.createElement("th");
       headerRow.appendChild(headerCell); // Celula goală pentru colțul din stânga-sus
 
@@ -331,14 +321,14 @@ function initializareDate() {
 
       table.appendChild(headerRow);
 
-      // Adăugăm rândurile pentru țări
+      // Adaugam randurile pentru tari
       for (const country of countries) {
         const countryRow = document.createElement("tr");
         const countryCell = document.createElement("td");
         countryCell.textContent = country;
         countryRow.appendChild(countryCell);
 
-        // Adăugăm celule pentru fiecare indicator
+        // Adaugam celule pentru fiecare indicator
         for (const indicator of indicators) {
           const value =
             data.find(
@@ -351,16 +341,7 @@ function initializareDate() {
 
           // Calculăm diferența față de medie pentru fiecare celulă
           const difference = value - averageValues[indicator];
-          console.log(
-            "indicator:" +
-              indicator +
-              ", minSV:" +
-              minSV +
-              ", maxSV:" +
-              maxSV +
-              ", avg:" +
-              averageValues[indicator]
-          );
+
           switch (indicator) {
             case "SV":
               cell.style.backgroundColor = scaleColor(
@@ -401,7 +382,7 @@ function initializareDate() {
       tableContainer.appendChild(table);
     }
     function scaleColor(value, average, minValue, maxValue) {
-      // Culoare pentru valorile mici (de la roșu închis la deschis)
+      // Culoare pentru valorile mici (de la rosu inchis la deschis)
       const darkRedColor = [255, 0, 0].map((channel) =>
         Math.min(
           255,
@@ -412,7 +393,7 @@ function initializareDate() {
         )
       );
 
-      // Culoare pentru valorile mari (de la verde închis la deschis)
+      // Culoare pentru valorile mari (de la verde inchis la deschis)
       const darkGreenColor = [0, 255, 0].map((channel) =>
         Math.min(
           255,
@@ -423,7 +404,7 @@ function initializareDate() {
         )
       );
 
-      // Interpolare între culorile roșu închis și verde închis
+      // Interpolare intre culorile rosu inchis și verde inchis
       const interpolatedColor = darkRedColor.map((channel, index) => {
         const interpolatedValue =
           channel +
@@ -474,7 +455,7 @@ async function loadData(indicator, finalURL, limit) {
       ani[value] = key;
     }
     const result = Object.keys(value).map((key) => [key, value[key]]);
-    // console.log("lungime value" + result.length / 27);
+
     limita = result.length / 27;
 
     for (let i = 0; i < result.length; i++) {
